@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCC | True Crime Community</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:#050505;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* Animated background */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(180,0,0,.15),transparent 30%),
+    radial-gradient(circle at 80% 70%,rgba(255,0,0,.08),transparent 30%);
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(255,255,255,.018) 4px
+  );
+  pointer-events:none;
+  z-index:20;
+}
+
+/* NAVBAR */
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:18px 7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,0,0,.2);
+  z-index:10;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:4px;
+}
+
+.logo span{
+  color:#e00000;
+}
+
+nav a{
+  color:#aaa;
+  text-decoration:none;
+  margin-left:20px;
+  font-size:14px;
+}
+
+nav a:hover{
+  color:#ff1a1a;
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:100px 20px 50px;
+  position:relative;
+}
+
+.hero-content{
+  max-width:850px;
+}
+
+.badge{
+  display:inline-block;
+  padding:8px 15px;
+  border:1px solid #700;
+  color:#ff3030;
+  font-size:12px;
+  letter-spacing:3px;
+  margin-bottom:25px;
+  animation:pulse 2s infinite;
+}
+
+.hero h1{
+  font-size:clamp(55px,12vw,130px);
+  letter-spacing:10px;
+  font-weight:900;
+  position:relative;
+  animation:flicker 4s infinite;
+}
+
+.hero h1 span{
+  color:#d40000;
+}
+
+.hero p{
+  color:#aaa;
+  margin:25px auto;
+  max-width:600px;
+  line-height:1.7;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:15px 30px;
+  background:#b00000;
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  letter-spacing:2px;
+  border:1px solid #ff2020;
+  transition:.3s;
+}
+
+.btn:hover{
+  background:#ff0000;
+  box-shadow:0 0 30px rgba(255,0,0,.5);
+  transform:translateY(-3px);
+}
+
+/* SECTIONS */
+section{
+  padding:100px 8%;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:50px;
+}
+
+.section-title h2{
+  font-size:38px;
+  letter-spacing:4px;
+}
+
+.section-title span{
+  color:#d00000;
+}
+
+.section-title p{
+  color:#777;
+  margin-top:10px;
+}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:rgba(20,20,20,.8);
+  border:1px solid #292929;
+  padding:30px;
+  transition:.3s;
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:2px;
+  background:#f00000;
+  transition:.4s;
+}
+
+.card:hover::before{
+  left:0;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  border-color:#700;
+}
+
+.card h3{
+  color:#eee;
+  margin-bottom:15px;
+}
+
+.card p{
+  color:#888;
+  line-height:1.6;
+}
+
+/* APPLICATION */
+.application{
+  max-width:700px;
+  margin:auto;
+  background:#0c0c0c;
+  padding:35px;
+  border:1px solid #292929;
+  box-shadow:0 0 50px rgba(0,0,0,.5);
+}
+
+.input{
+  margin-bottom:20px;
+}
+
+.input label{
+  display:block;
+  color:#999;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.input input,
+.input textarea,
+.input select{
+  width:100%;
+  padding:14px;
+  background:#050505;
+  border:1px solid #333;
+  color:white;
+  outline:none;
+}
+
+.input input:focus,
+.input textarea:focus,
+.input select:focus{
+  border-color:#b00000;
+  box-shadow:0 0 10px rgba(180,0,0,.2);
+}
+
+.input textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.submit{
+  width:100%;
+  padding:15px;
+  border:0;
+  background:#a00000;
+  color:white;
+  font-weight:bold;
+  letter-spacing:2px;
+  cursor:pointer;
+}
+
+.submit:hover{
+  background:#e00000;
+}
+
+/* SUCCESS */
+#success{
+  display:none;
+  margin-top:20px;
+  padding:15px;
+  border:1px solid #700;
+  background:#180000;
+  color:#ff5555;
+  text-align:center;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:35px 20px;
+  border-top:1px solid #222;
+  color:#555;
+  font-size:13px;
+}
+
+footer strong{
+  color:#b00000;
+}
+
+/* ANIMATIONS */
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 rgba(255,0,0,0)}
+  50%{box-shadow:0 0 25px rgba(255,0,0,.3)}
+}
+
+@keyframes flicker{
+  0%,18%,22%,63%,64%,65%,100%{opacity:1}
+  19%,21%,62%{opacity:.65}
+}
+
+@media(max-width:600px){
+  nav{
+    padding:15px;
+  }
+
+  nav a{
+    margin-left:8px;
+    font-size:11px;
+  }
+
+  .hero h1{
+    letter-spacing:5px;
+  }
+
+  section{
+    padding:75px 5%;
+  }
+
+  .application{
+    padding:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">T<span>C</span>C</div>
+
+  <div>
+    <a href="#about">ABOUT</a>
+    <a href="#rules">RULES</a>
+    <a href="#apply">APPLY</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <div class="hero-content">
+
+    <div class="badge">PRIVATE COMMUNITY • APPLICATION OPEN</div>
+
+    <h1>T<span>C</span>C</h1>
+
+    <p>
+      TRUE CRIME COMMUNITY
+      <br><br>
+      A community for responsible case discussion,
+      research, awareness, and documentation.
+    </p>
+
+    <a class="btn" href="#apply">APPLY TO JOIN</a>
+
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+
+  <div class="section-title">
+    <h2>ABOUT <span>TCC</span></h2>
+    <p>Know the purpose behind the community.</p>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>🔎 RESEARCH</h3>
+      <p>
+        Discuss publicly available information
+        and encourage responsible research.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>📁 CASE DISCUSSION</h3>
+      <p>
+        Share perspectives and discuss documented
+        cases respectfully.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>🛡️ AWARENESS</h3>
+      <p>
+        Promote awareness while respecting victims,
+        families, and privacy.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- RULES -->
+<section id="rules">
+
+  <div class="section-title">
+    <h2>COMMUNITY <span>RULES</span></h2>
+    <p>Everyone must follow these rules.</p>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>01 — RESPECT</h3>
+      <p>
+        Respect victims, families, members,
+        and different opinions.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>02 — VERIFY</h3>
+      <p>
+        Verify information before presenting
+        something as a fact.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>03 — PRIVACY</h3>
+      <p>
+        No doxxing, private information,
+        threats, or harassment.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>04 — NO FABRICATION</h3>
+      <p>
+        Do not create fake evidence,
+        fake identities, or false accusations.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- APPLICATION -->
+<section id="apply">
+
+  <div class="section-title">
+    <h2>JOIN <span>TCC</span></h2>
+    <p>Submit your application below.</p>
+  </div>
+
+  <div class="application">
+
+    <form id="applicationForm">
+
+      <div class="input">
+        <label>USERNAME</label>
+        <input type="text" id="username" required>
+      </div>
+
+      <div class="input">
+        <label>AGE</label>
+        <input type="number" id="age" min="13" required>
+      </div>
+
+      <div class="input">
+        <label>WHY DO YOU WANT TO JOIN?</label>
+        <textarea id="reason" required></textarea>
+      </div>
+
+      <div class="input">
+        <label>WHAT CAN YOU CONTRIBUTE?</label>
+        <textarea id="contribution" required></textarea>
+      </div>
+
+      <div class="input">
+        <label>AGREE TO COMMUNITY RULES?</label>
+
+        <select id="agree" required>
+          <option value="">SELECT</option>
+          <option value="yes">YES — I AGREE</option>
+          <option value="no">NO</option>
+        </select>
+
+      </div>
+
+      <button class="submit" type="submit">
+        SUBMIT APPLICATION
+      </button>
+
+      <div id="success">
+        APPLICATION RECEIVED.<br>
+        Your application is ready for admin review.
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+
+<footer>
+  <strong>TCC</strong> — TRUE CRIME COMMUNITY
+  <br><br>
+  Research • Discussion • Awareness • Respect
+</footer>
+
+<script>
+
+document.getElementById("applicationForm").addEventListener("submit", function(e){
+
+  e.preventDefault();
+
+  const age = Number(document.getElementById("age").value);
+  const agree = document.getElementById("agree").value;
+
+  if(age < 13){
+    alert("You must meet the community's minimum age requirement.");
+    return;
+  }
+
+  if(agree !== "yes"){
+    alert("You must agree to the community rules.");
+    return;
+  }
+
+  document.getElementById("success").style.display = "block";
+
+  document.getElementById("applicationForm").reset();
+
+});
+
+</script>
+
+</body>
+</html>
